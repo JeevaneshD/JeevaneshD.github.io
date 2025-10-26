@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samanyaya - The Balance We Build</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+        
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+        }
+        
+        .space-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #e8a23d 0%, #f4c563 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(232, 162, 61, 0.08) 0%, transparent 50%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+        }
+        
+        .scroll-container {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .glow-line {
+            box-shadow: 0 0 20px rgba(232, 162, 61, 0.3);
+        }
+    </style>
+</head>
+<body class="text-white">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8" viewBox="0 0 121.61 145.74" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#e8a23d" d="M107.24,62.4c-.11-.19-.21-.37-.33-.56-1.99-3.26-4.29-6.33-6.86-9.11-.26-.3-.52-.58-.79-.86l-.5-.53.12-.72c.07-.36.13-.72.17-1.09.21-1.41.35-2.83.42-4.24.93-21.47-15.25-35.69-36.6-37.88l.29-5.43-.31,5.44c-.72-.07-1.49-.12-2.42-.16s-1.71-.06-2.44-.05l.17-5.41-.18,5.4c-21.47.34-38.83,13.09-39.76,34.57-.06,1.42-.05,2.85.04,4.27.02.37.04.74.07,1.1.83,9.54,5.1,17.04,11.93,23.81h0s.4.39.4.39c.48.47.98.94,1.55,1.42.17.14.34.3.51.44.47.4.94.76,1.42,1.12.87.63,1.77,1.2,2.7,1.7l-.41,9.51c-2.7-1.1-5.33-2.39-7.89-3.88-.7-.41-1.41-.84-2.14-1.31-.37-.24-.74-.48-1.13-.73-.86-.58-1.7-1.21-2.53-1.91-6.16-5.12-11.4-13.07-15.46-19.71-.1-.16-.2-.33-.3-.49-2.7-4.4-4.81-9.13-6.32-14.07-.2-.66-.39-1.32-.57-1.99l-.12-.44.16-.43c.24-.65.47-1.29.73-1.92,4.53-11.31,12.25-20.78,21.87-27.51C32.93,4.03,45.22-.02,58.15,0c.8-.02,1.65,0,2.6.03s1.79.11,2.58.19c25.09,2.12,46.41,19.48,53.69,43.46-.24.8-.51,1.6-.8,2.38-1.96,5.44-4.68,10.49-8.02,15.05l-.96,1.27Z"/>
+                        <path fill="#e8a23d" d="M59.79,22.02c-12.45-.54-23.79,7.8-26.97,19.83l-.73,2.77,2.66-1.06c7.73-3.08,15.9-4.46,24.28-4.1,8.38.36,16.4,2.45,23.83,6.19l2.56,1.29-.49-2.82c-2.12-12.26-12.69-21.56-25.15-22.1Z"/>
+                        <path fill="#e8a23d" d="M14.37,83.34c.11.19.21.37.33.56,1.99,3.26,4.29,6.33,6.86,9.11.26.3.52.58.79.86l.5.53-.12.72c-.07.36-.13.72-.17,1.09-.21,1.41-.35,2.83-.42,4.24-.93,21.47,15.25,35.69,36.6,37.88l-.29,5.43.31-5.44c.72.07,1.49.12,2.42.16s1.71.06,2.44.05l-.17,5.41.18-5.4c21.47-.34,38.83-13.09,39.76-34.57.06-1.42.05-2.85-.04-4.27-.02-.37-.04-.74-.07-1.1-.83-9.54-5.1-17.04-11.93-23.81h0s-.4-.39-.4-.39c-.48-.47-.98-.94-1.55-1.42-.17-.14-.34-.3-.51-.44-.47-.4-.94-.76-1.42-1.12-.87-.63-1.77-1.2-2.7-1.7l.41-9.51c2.7,1.1,5.33,2.39,7.89,3.88.7.41,1.41.84,2.14,1.31.37.24.74.48,1.13.73.86.58,1.7,1.21,2.53,1.91,6.16,5.12,11.4,13.07,15.46,19.71.1.16.2.33.3.49,2.7,4.4,4.81,9.13,6.32,14.07.2.66.39,1.32.57,1.99l.12.44-.16.43c-.24.65-.47,1.29-.73,1.92-4.53,11.31-12.25,20.78-21.87,27.51-10.17,7.11-22.46,11.16-35.39,11.13-.8.02-1.65,0-2.6-.03s-1.79-.11-2.58-.19c-25.09-2.12-46.41-19.48-53.69-43.46.24-.8.51-1.6.8-2.38,1.96-5.44,4.68-10.49,8.02-15.05l.96-1.27Z"/>
+                        <path fill="#e8a23d" d="M61.82,123.72c12.45.54,23.79-7.8,26.97-19.83l.73-2.77-2.66,1.06c-7.73,3.08-15.9,4.46-24.28,4.1-8.38-.36-16.4-2.45-23.83-6.19l-2.56-1.29.49,2.82c2.12,12.26,12.69,21.56,25.15,22.1Z"/>
+                        <rect fill="#1f96bf" x="39.43" y="77.05" width="41.6" height="9.5" transform="translate(3.61 -2.54) rotate(2.49)"/>
+                        <rect fill="#1f96bf" x="40.17" y="59.2" width="41.89" height="9.5" transform="translate(2.83 -2.59) rotate(2.49)"/>
+                    </svg>
+                    <div class="text-2xl font-bold space-grotesk gradient-text">Samanyaya</div>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#awareness" class="text-sm text-gray-400 hover:text-white transition">Awareness</a>
+                    <a href="#mission" class="text-sm text-gray-400 hover:text-white transition">Mission</a>
+                    <a href="#involved" class="text-sm text-gray-400 hover:text-white transition">Get Involved</a>
+                    <button class="px-5 py-2 bg-[#e8a23d] text-black text-sm font-semibold rounded-full hover:bg-[#f4c563] transition">
+                        Join Us
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden hero-bg pt-20">
+        <div class="absolute inset-0 opacity-15">
+            <img src="https://images.unsplash.com/photo-1589216532372-1c2a367900d9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1171" 
+                 alt="Justice" 
+                 class="w-full h-full object-cover">
+        </div>
+        
+        <div class="max-w-5xl mx-auto px-6 text-center relative z-10 fade-in">
+            <h1 class="text-6xl md:text-8xl font-bold space-grotesk mb-6 leading-tight">
+                For A<br/>
+                <span class="gradient-text">Balanced World</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                When justice leans, awareness balances it
+            </p>
+            <button class="px-8 py-4 bg-[#e8a23d] text-black font-semibold rounded-full hover:bg-[#f4c563] transition">
+                Join the Movement →
+            </button>
+        </div>
+    </section>
+
+    <!-- Awareness Section -->
+    <section id="awareness" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-20">
+                <h2 class="text-5xl md:text-6xl font-bold space-grotesk mb-4">The Unseen Gaps</h2>
+                <p class="text-xl text-gray-400">Understanding the barriers to equal justice</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 card-hover">
+                    <div class="text-4xl font-bold gradient-text mb-4">65%</div>
+                    <h3 class="text-xl font-semibold mb-3">Urban vs Rural</h3>
+                    <p class="text-sm text-gray-400">of rural citizens lack easy access to courts</p>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 card-hover">
+                    <div class="text-4xl font-bold gradient-text mb-4">₹50K+</div>
+                    <h3 class="text-xl font-semibold mb-3">Legal Costs</h3>
+                    <p class="text-sm text-gray-400">average cost to pursue a basic legal case</p>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 card-hover">
+                    <div class="text-4xl font-bold gradient-text mb-4">70%</div>
+                    <h3 class="text-xl font-semibold mb-3">Awareness Gap</h3>
+                    <p class="text-sm text-gray-400">don't know their basic legal rights</p>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 card-hover">
+                    <div class="text-4xl font-bold gradient-text mb-4">4+ Years</div>
+                    <h3 class="text-xl font-semibold mb-3">Delayed Justice</h3>
+                    <p class="text-sm text-gray-400">average time for case resolution</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Next Generation Section -->
+    <section class="py-32 px-6 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#e8a23d]/5 to-transparent"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="mb-20">
+                <h2 class="text-5xl md:text-6xl font-bold space-grotesk mb-4">Awareness Is Their Weapon</h2>
+                <p class="text-xl text-gray-400">The next generation isn't waiting — they're building it</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="group bg-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 card-hover cursor-pointer">
+                    <div class="text-5xl mb-6">📚</div>
+                    <h3 class="text-2xl font-semibold mb-3">Student Advocate</h3>
+                    <p class="text-gray-400 mb-4">Studying law to defend the defenseless</p>
+                    <p class="text-sm text-[#e8a23d] opacity-0 group-hover:opacity-100 transition italic">
+                        "Education gave me the courage to question injustice"
+                    </p>
+                </div>
+                
+                <div class="group bg-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 card-hover cursor-pointer">
+                    <div class="text-5xl mb-6">📢</div>
+                    <h3 class="text-2xl font-semibold mb-3">Community Organizer</h3>
+                    <p class="text-gray-400 mb-4">Mobilizing voices for change</p>
+                    <p class="text-sm text-[#e8a23d] opacity-0 group-hover:opacity-100 transition italic">
+                        "I'm learning to question fairness and demand accountability"
+                    </p>
+                </div>
+                
+                <div class="group bg-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 card-hover cursor-pointer">
+                    <div class="text-5xl mb-6">✍️</div>
+                    <h3 class="text-2xl font-semibold mb-3">Digital Storyteller</h3>
+                    <p class="text-gray-400 mb-4">Sharing stories of resilience</p>
+                    <p class="text-sm text-[#e8a23d] opacity-0 group-hover:opacity-100 transition italic">
+                        "Every story shared is a step toward awareness"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="py-32 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="w-full aspect-square relative">
+                        <div class="absolute inset-0 rounded-full bg-[#e8a23d]/10 blur-3xl"></div>
+                        <svg class="w-full h-full relative z-10" viewBox="0 0 200 200" fill="none">
+                            <line x1="100" y1="40" x2="100" y2="160" stroke="#e8a23d" stroke-width="2"/>
+                            <line x1="40" y1="100" x2="160" y2="100" stroke="#e8a23d" stroke-width="2"/>
+                            <circle cx="60" cy="100" r="20" fill="#e8a23d" opacity="0.8"/>
+                            <circle cx="140" cy="100" r="20" fill="#e8a23d" opacity="0.8"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 class="text-5xl md:text-6xl font-bold space-grotesk mb-6">Our Mission</h2>
+                    <p class="text-lg text-gray-300 mb-6 leading-relaxed">
+                        Samanyaya bridges awareness, accessibility, and action. We create campaigns, art, and dialogues that challenge bias and inspire justice for everyone.
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Through education, advocacy, and community engagement, we empower citizens to understand their rights, access legal resources, and demand accountability.
+                    </p>
+                    <button class="px-6 py-3 border-2 border-[#e8a23d] text-[#e8a23d] rounded-full font-semibold hover:bg-[#e8a23d] hover:text-black transition">
+                        Know More About Us →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Involved Section -->
+    <section id="involved" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-20">
+                <h2 class="text-5xl md:text-6xl font-bold space-grotesk mb-4">Be Part of the Balance</h2>
+                <p class="text-xl text-gray-400">Choose your path to justice</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 card-hover cursor-pointer">
+                    <div class="w-12 h-12 bg-[#e8a23d] rounded-full flex items-center justify-center mb-6">
+                        <span class="text-2xl">📝</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Take the Quiz</h3>
+                    <p class="text-gray-400 mb-6">Test your understanding of legal rights and discover knowledge gaps</p>
+                    <button class="text-[#e8a23d] font-semibold hover:text-[#f4c563] transition">Start Quiz →</button>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 card-hover cursor-pointer">
+                    <div class="w-12 h-12 bg-[#e8a23d] rounded-full flex items-center justify-center mb-6">
+                        <span class="text-2xl">💬</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Share Your Story</h3>
+                    <p class="text-gray-400 mb-6">Your experience matters. Help others by sharing your journey</p>
+                    <button class="text-[#e8a23d] font-semibold hover:text-[#f4c563] transition">Share Now →</button>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 card-hover cursor-pointer">
+                    <div class="w-12 h-12 bg-[#e8a23d] rounded-full flex items-center justify-center mb-6">
+                        <span class="text-2xl">📅</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Join Events</h3>
+                    <p class="text-gray-400 mb-6">Participate in workshops, seminars, and community dialogues</p>
+                    <button class="text-[#e8a23d] font-semibold hover:text-[#f4c563] transition">View Events →</button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <p class="text-gray-400 mb-6">Raise your voice for fairness</p>
+                <div class="flex justify-center gap-4 mb-8">
+                    <button class="px-8 py-3 bg-[#e8a23d] text-black font-semibold rounded-full hover:bg-[#f4c563] transition">
+                        Donate
+                    </button>
+                    <button class="px-8 py-3 border-2 border-[#e8a23d] text-[#e8a23d] font-semibold rounded-full hover:bg-[#e8a23d] hover:text-black transition">
+                        Volunteer
+                    </button>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <span class="text-[#e8a23d]">#EqualJustice</span>
+                    <span class="text-[#e8a23d]">#Samanyaya</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold space-grotesk mb-8">Justice Belongs to Everyone</h3>
+                
+                <div class="flex flex-wrap justify-center gap-8 mb-8 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition">About</a>
+                    <a href="#" class="hover:text-white transition">Contact</a>
+                    <a href="#" class="hover:text-white transition">Instagram</a>
+                    <a href="#" class="hover:text-white transition">YouTube</a>
+                    <a href="#" class="hover:text-white transition">Donate</a>
+                    <a href="#" class="hover:text-white transition">Join Us</a>
+                </div>
+                
+                <div class="flex justify-center gap-4 mb-8">
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-[#e8a23d] hover:text-black transition border border-white/10">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-[#e8a23d] hover:text-black transition border border-white/10">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-[#e8a23d] hover:text-black transition border border-white/10">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <p class="text-gray-500 text-sm">
+                    Samanyaya © 2025 | A Movement for Equal Justice
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
