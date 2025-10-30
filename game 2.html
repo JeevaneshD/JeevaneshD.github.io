@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Balance Quest — Interactive Game with Samanyaya Popup</title>
+<style>
+  /* ---------- GAME STYLES (original) ---------- */
+  :root{
+    --bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#ff7a59;--accent-2:#ffd7c2;
+    --text:#eef2f7;--glass:rgba(255,255,255,0.03);--radius:12px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#071026 0%,#081126 60%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .app{width:100%;max-width:980px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#ffaf87);display:grid;place-items:center;font-weight:800;color:#1b1620}
+  .title{font-weight:800;font-size:18px}
+  .hud{display:flex;gap:12px;align-items:center}
+  .chip{background:var(--card);padding:8px 12px;border-radius:10px;color:var(--muted);font-weight:700;box-shadow:0 8px 26px rgba(2,6,23,0.6)}
+  .score{color:var(--accent);font-weight:900}
+  main{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:14px;border-radius:14px;box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+  .stage{display:flex;gap:16px;flex-direction:column;align-items:center;padding:10px}
+  .scale-area{position:relative;width:100%;max-width:820px;height:260px;display:flex;align-items:center;justify-content:center}
+  .beam{width:80%;height:10px;background:linear-gradient(90deg,#ffd8c8,#fff1ea);border-radius:10px;transform-origin:center center;transition:transform 300ms cubic-bezier(.2,.9,.2,1);position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+  .pivot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,0.4)}
+  .pan{position:absolute;top:calc(50% + 56px);width:260px;display:flex;gap:12px;justify-content:space-between;pointer-events:auto}
+  .pan.left{left:calc(50% - 430px)} .pan.right{right:calc(50% - 430px)}
+  .slot{width:72px;height:62px;border-radius:10px;background:linear-gradient(180deg,#fff,#fff);border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 8px 24px rgba(0,0,0,0.24)}
+  .slot[data-distance]::after{content:attr(data-distance);position:absolute;bottom:-18px;font-size:12px;color:var(--muted)}
+  .slot.highlight{outline:3px solid rgba(255,122,89,0.12)}
+  .pool{display:flex;gap:8px;flex-wrap:wrap;padding:10px;border-radius:10px;border:1px dashed rgba(255,255,255,0.04);margin-top:12px;align-items:center;min-height:72px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))}
+  .weight{width:66px;height:44px;border-radius:10px;background:linear-gradient(90deg,#fff,#fff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b1220;box-shadow:0 10px 28px rgba(0,0,0,0.28);user-select:none;touch-action:none;cursor:pointer}
+  .weight.dragging{transform:scale(1.06);box-shadow:0 26px 50px rgba(0,0,0,0.48);z-index:999}
+  .controls{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px}
+  .left-controls{display:flex;gap:8px;align-items:center}
+  button.btn{background:linear-gradient(90deg,var(--accent),#ffb38f);color:#1b1620;border:none;padding:10px 12px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,0.28)}
+  button.btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  .info{color:var(--muted);font-weight:700}
+  .panel{display:flex;gap:10px;align-items:center}
+  .muted{color:var(--muted)}
+  .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+  @media(max-width:880px){
+    .pan.left{left:10px} .pan.right{right:10px}
+    .beam{width:92%}
+    .stage{padding:6px}
+  }
+
+  /* ---------- AD / POPUP STYLES (provided) ---------- */
+  /* scoped under #adModal to avoid conflicts */
+  #adModal .ad-wrap{width:720px;max-width:92vw;background:#fff;border-radius:12px;padding:20px;box-shadow:0 6px 18px rgba(0,0,0,0.08);position:relative;color:#5b5b5b}
+  #adModal .header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  #adModal .logo{width:46px;height:46px;border-radius:8px;background:linear-gradient(135deg,#ffd6cc,#ffa88a);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+  #adModal .title{font-size:18px;color:#7a6b6b;font-weight:700}
+  #adModal .desc{color:#5b5b5b;font-size:13px;margin-bottom:14px}
+
+  #adModal .game-area{background:linear-gradient(180deg,#fff,#fffaf7);border-radius:10px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  #adModal .scale-wrap{width:100%;max-width:640px;height:220px;position:relative}
+
+  #adModal .beam{position:absolute;left:50%;top:60px;width:420px;height:8px;background:#dcd2c9;border-radius:8px;transform-origin:50% 50%;transition:transform 250ms cubic-bezier(.22,.9,.3,1)}
+  #adModal .pillar{position:absolute;left:50%;top:48px;width:16px;height:100px;background:#c8b7ae;border-radius:6px;transform:translateX(-50%)}
+  #adModal .pivot{position:absolute;left:50%;top:60px;width:28px;height:28px;background:#f8efe9;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,0.07);transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:#d94b3d;font-weight:700}
+
+  #adModal .pan{position:absolute;top:80px;width:120px;height:12px;background:#efe6df;border-radius:6px;left:50%;transform:translateX(-50%);}
+  #adModal .pan.left{left:calc(50% - 210px)}
+  #adModal .pan.right{left:calc(50% + 90px)}
+  #adModal .rope{position:absolute;top:44px;width:3px;height:36px;background:#b29e94;border-radius:2px}
+  #adModal .rope.left{left:calc(50% - 150px)}
+  #adModal .rope.right{left:calc(50% + 150px)}
+
+  #adModal .weights-pool{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:8px}
+  #adModal .weight{width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,#fff,#ffdcd0);display:flex;align-items:center;justify-content:center;font-weight:700;color:#d94b3d;box-shadow:0 6px 12px rgba(0,0,0,0.06);cursor:grab;user-select:none}
+  #adModal .weight:active{cursor:grabbing}
+
+  #adModal .pan-area{position:absolute;top:90px;width:120px;height:120px;display:flex;align-items:flex-start;justify-content:center;gap:6px}
+  #adModal .pan-area.left{left:calc(50% - 210px);transform:translateX(-50%)}
+  #adModal .pan-area.right{left:calc(50% + 90px);transform:translateX(-50%)}
+  #adModal .pan-slot{width:100%;height:100px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px;padding:6px}
+
+  #adModal .controls{display:flex;align-items:center;gap:10px;margin-top:12px}
+  #adModal .btn{background:#d94b3d;color:white;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+  #adModal .btn-secondary{background:transparent;border:1px solid #e8d6d2;color:#7a6b6b}
+
+  #adModal .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.85));display:flex;align-items:center;justify-content:center;border-radius:12px;backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity 220ms}
+  #adModal .overlay.show{opacity:1;pointer-events:auto}
+  #adModal .message{background:linear-gradient(180deg,#fff,#fffefc);padding:22px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);text-align:center;max-width:88%}
+  #adModal .message h2{margin:0 0 8px 0;color:#d94b3d;font-size:20px}
+  #adModal .message p{margin:0 0 12px 0;color:#7a6b6b}
+
+  #adModal .cta{display:inline-block;background:#d94b3d;color:white;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700}
+
+  #adModal .meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;color:#8b7f7f;font-size:12px}
+
+  @media(max-width:520px){
+    #adModal .ad-wrap{padding:14px}
+    #adModal .scale-wrap{height:190px}
+    #adModal .beam{width:320px}
+    #adModal .weight{width:46px;height:46px}
+  }
+
+  /* modal backdrop used to show ad modal */
+  #modalBackdrop {
+    position:fixed;inset:0;display:none;place-items:center;z-index:9999;background:rgba(2,6,23,0.5);
+  }
+  #modalBackdrop.show{display:grid}
+</style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Balance Quest Game">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">BQ</div>
+        <div>
+          <div class="title">Balance Quest</div>
+          <div class="muted" style="font-size:13px">Balance the scale to win each level</div>
+        </div>
+      </div>
+      <div class="hud">
+        <div class="chip">Level: <span id="levelNum">1</span></div>
+        <div class="chip">Time: <span id="timeLeft">30</span>s</div>
+        <div class="chip">Score: <span id="score">0</span></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage" id="stage">
+        <div class="scale-area" id="scaleArea" aria-label="Scale area">
+          <div class="beam" id="beam" aria-hidden="true"><div class="pivot" aria-hidden="true"></div></div>
+
+          <div class="pan left" id="leftPan" aria-label="Left pan" tabindex="0" role="region">
+            <div class="slot" data-distance="1" data-slot-index="0" tabindex="-1"></div>
+            <div class="slot" data-distance="2" data-slot-index="1" tabindex="-1"></div>
+            <div class="slot" data-distance="3" data-slot-index="2" tabindex="-1"></div>
+          </div>
+
+          <div class="pan right" id="rightPan" aria-label="Right pan" tabindex="0" role="region">
+            <div class="slot" data-distance="1" data-slot-index="0" tabindex="-1"></div>
+            <div class="slot" data-distance="2" data-slot-index="1" tabindex="-1"></div>
+            <div class="slot" data-distance="3" data-slot-index="2" tabindex="-1"></div>
+          </div>
+        </div>
+
+        <div style="width:100%;max-width:920px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <div class="left-controls">
+              <button id="hintBtn" class="btn secondary">Hint</button>
+              <button id="resetBtn" class="btn secondary">Reset</button>
+              <button id="skipBtn" class="btn secondary">Skip Level</button>
+            </div>
+            <div class="panel">
+              <div class="info">L Torque: <span id="leftTorque">0</span></div>
+              <div style="width:12px"></div>
+              <div class="info">R Torque: <span id="rightTorque">0</span></div>
+            </div>
+          </div>
+
+          <div class="pool" id="pool" aria-label="Available weights" style="margin-top:12px">
+            <!-- weights will be injected by JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Integrated ad-styled modal for level complete -->
+  <div id="modalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div id="adModal" class="ad-wrap" role="document" aria-labelledby="adTitle">
+      <div class="header">
+        <div class="logo">S</div>
+        <div>
+          <div class="title">SAMANYAYA</div>
+          <div class="desc">Drag the weights on the pans and make the scale even — justice feels right when it's equal.</div>
+        </div>
+      </div>
+
+      <div class="game-area">
+        <div class="scale-wrap" id="scaleWrap">
+          <div class="pillar"></div>
+          <div class="pivot">⚖</div>
+          <div class="beam" id="adBeam"></div>
+
+          <div class="rope left"></div>
+          <div class="rope right"></div>
+
+          <div class="pan left"></div>
+          <div class="pan right"></div>
+
+          <div class="pan-area left" id="adLeftPan"></div>
+          <div class="pan-area right" id="adRightPan"></div>
+        </div>
+
+        <div class="weights-pool" id="adPool">
+          <div class="weight" draggable="true" data-weight="3">3</div>
+          <div class="weight" draggable="true" data-weight="2">2</div>
+          <div class="weight" draggable="true" data-weight="1">1</div>
+          <div class="weight" draggable="true" data-weight="1">1</div>
+          <div class="weight" draggable="true" data-weight="2">2</div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="adResetBtn">Reset</button>
+          <button class="btn-secondary" id="adHintBtn">Hint</button>
+
+          <div style="flex:1"></div>
+          <div style="font-size:13px;color:#7a6b6b">Torque difference: <span id="adDiff">0</span></div>
+        </div>
+
+        <div class="meta">
+          <div>Tip: Drag and drop weights onto either pan. Use touch or mouse.</div>
+          <div>Designed for Samanyaya</div>
+        </div>
+      </div>
+
+      <!-- success overlay message inside ad modal -->
+      <div class="overlay show" id="adOverlay" aria-hidden="false">
+        <div class="message">
+          <h2 id="adTitle">Justice feels right when it’s equal.</h2>
+          <p id="adMsg">Thanks for balancing the scale — stand with Samanyaya to promote equal access to justice.</p>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+            <a class="cta" href="https://jeevaneshd.github.io" id="supportBtn" target="_blank" rel="noopener">Support Samanyaya</a>
+            <button id="nextLevelBtn" class="btn">Next Level</button>
+            <button id="closeModalBtn" class="btn-secondary">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* Balance Quest - with ad modal integrated */
+const DOM = {
+  pool: document.getElementById('pool'),
+  leftPan: document.getElementById('leftPan'),
+  rightPan: document.getElementById('rightPan'),
+  leftTorqueEl: document.getElementById('leftTorque'),
+  rightTorqueEl: document.getElementById('rightTorque'),
+  beam: document.getElementById('beam'),
+  timeLeft: document.getElementById('timeLeft'),
+  levelNum: document.getElementById('levelNum'),
+  score: document.getElementById('score'),
+  hintBtn: document.getElementById('hintBtn'),
+  resetBtn: document.getElementById('resetBtn'),
+  skipBtn: document.getElementById('skipBtn'),
+  modalBackdrop: document.getElementById('modalBackdrop'),
+  nextLevelBtn: document.getElementById('nextLevelBtn'),
+  closeModalBtn: document.getElementById('closeModalBtn'),
+  // ad modal internals
+  adPool: document.getElementById('adPool'),
+  adLeftPan: document.getElementById('adLeftPan'),
+  adRightPan: document.getElementById('adRightPan'),
+  adBeam: document.getElementById('adBeam'),
+  adDiff: document.getElementById('adDiff'),
+  adResetBtn: document.getElementById('adResetBtn'),
+  adHintBtn: document.getElementById('adHintBtn'),
+  adOverlay: document.getElementById('adOverlay'),
+  supportBtn: document.getElementById('supportBtn'),
+};
+
+const LEVELS = [
+  {time:30, tolerance:0, weights:[1,1,1,2,2], distances:[1,2,3]},
+  {time:25, tolerance:0, weights:[1,1,2,2,3], distances:[1,2,3]},
+  {time:20, tolerance:1, weights:[1,2,2,3,4], distances:[1,2,3]},
+  {time:18, tolerance:0, weights:[1,1,2,3,4,4], distances:[1,2,3]},
+  {time:16, tolerance:0, weights:[2,3,3,4,5], distances:[1,2,3]}
+];
+
+let levelIndex = 0;
+let state = {
+  leftSlots: [null,null,null],
+  rightSlots: [null,null,null],
+  pool: [],
+  leftTorque: 0,
+  rightTorque: 0,
+  timer: null,
+  timeRemaining: 0,
+  score: 0,
+  grabbed: null
+};
+
+function startLevel(idx){
+  levelIndex = idx;
+  const level = LEVELS[levelIndex];
+  clearSlotsAndPool();
+  DOM.levelNum.textContent = (levelIndex+1);
+  level.weights.forEach((w,i) => {
+    const id = `w-${Date.now()}-${i}-${Math.random().toString(36).slice(2,6)}`;
+    const el = createWeightEl(id, w);
+    DOM.pool.appendChild(el);
+  });
+  const leftSlots = DOM.leftPan.querySelectorAll('.slot');
+  const rightSlots = DOM.rightPan.querySelectorAll('.slot');
+  leftSlots.forEach((s,i)=> s.dataset.distance = level.distances[i] ?? level.distances[level.distances.length-1]);
+  rightSlots.forEach((s,i)=> s.dataset.distance = level.distances[i] ?? level.distances[level.distances.length-1]);
+
+  state.timeRemaining = level.time;
+  DOM.timeLeft.textContent = state.timeRemaining;
+  recomputeAndRender();
+  startTimer();
+}
+
+function clearSlotsAndPool(){
+  document.querySelectorAll('.weight').forEach(w => w.remove());
+  state.leftSlots = [null,null,null];
+  state.rightSlots = [null,null,null];
+  state.pool = [];
+}
+
+function createWeightEl(id, weight){
+  const div = document.createElement('div');
+  div.className = 'weight';
+  div.id = id;
+  div.tabIndex = 0;
+  div.innerText = weight;
+  div.dataset.weight = weight;
+  div.addEventListener('pointerdown', onPointerDown);
+  div.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      keyboardPick(div);
+    }
+  });
+  div.addEventListener('click', () => {
+    if (!state.grabbed) clickPlace(div.id);
+  });
+  return div;
+}
+
+/* Pointer drag (game) */
+let moveRaf = null;
+let movedSinceDown = false;
+function onPointerDown(e){
+  const el = e.currentTarget;
+  if (e.button && e.button !== 0) return;
+  e.preventDefault();
+  el.setPointerCapture(e.pointerId);
+  movedSinceDown = false;
+  startDrag(el, e.clientX, e.clientY);
+  function onMove(ev){ movedSinceDown = true; moveDraggedTo(ev.clientX, ev.clientY); }
+  function onUp(ev){
+    try{ el.releasePointerCapture(ev.pointerId); }catch(e){}
+    el.removeEventListener('pointermove', onMove);
+    el.removeEventListener('pointerup', onUp);
+    endDrag(el, ev.clientX, ev.clientY);
+  }
+  el.addEventListener('pointermove', onMove);
+  el.addEventListener('pointerup', onUp);
+}
+
+function startDrag(el, x, y){
+  state.grabbed = {id: el.id, keyboard:false};
+  el.classList.add('dragging');
+  const r = el.getBoundingClientRect();
+  el.style.position = 'fixed';
+  el.style.left = `${r.left}px`;
+  el.style.top = `${r.top}px`;
+  el.style.width = `${r.width}px`;
+  el.style.height = `${r.height}px`;
+  document.body.appendChild(el);
+  moveDraggedTo(x,y);
+}
+
+function moveDraggedTo(x,y){
+  if (moveRaf) cancelAnimationFrame(moveRaf);
+  moveRaf = requestAnimationFrame(()=>{
+    const el = document.getElementById(state.grabbed?.id);
+    if (!el) return;
+    el.style.left = (x - 36) + 'px';
+    el.style.top = (y - 22) + 'px';
+    highlightSlotUnderPoint(x,y);
+  });
+}
+
+function endDrag(el, x, y){
+  el.classList.remove('dragging');
+  el.style.position = '';
+  el.style.left = '';
+  el.style.top = '';
+  el.style.width = '';
+  el.style.height = '';
+  const slot = findSlotUnderPoint(x,y);
+  if (slot) placeWeightInSlot(el.id, slot.side, Number(slot.index));
+  else if (isPointInElem(x,y, DOM.pool)) DOM.pool.appendChild(el);
+  else DOM.pool.appendChild(el);
+  state.grabbed = null;
+  clearHighlights();
+  recomputeAndRender();
+}
+
+function findSlotUnderPoint(x,y){
+  const node = document.elementFromPoint(x,y);
+  if (!node) return null;
+  const slot = node.closest('.slot');
+  if (slot){
+    return {el: slot, side: slot.closest('.pan').classList.contains('left') ? 'left' : 'right', index: Number(slot.dataset.slotIndex)};
+  }
+  const pan = node.closest('.pan');
+  if (pan){
+    const side = pan.classList.contains('left') ? 'left' : 'right';
+    const idx = firstEmptyIndex(side);
+    if (idx !== null){
+      const slotEl = pan.querySelector(`.slot[data-slot-index="${idx}"]`);
+      return {el: slotEl, side, index: idx};
+    }
+  }
+  return null;
+}
+
+function isPointInElem(x,y, el){
+  const r = el.getBoundingClientRect();
+  return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+}
+
+function highlightSlotUnderPoint(x,y){
+  clearHighlights();
+  const s = findSlotUnderPoint(x,y);
+  if (s && s.el) s.el.classList.add('highlight');
+}
+function clearHighlights(){ document.querySelectorAll('.slot.highlight').forEach(s=>s.classList.remove('highlight')); }
+
+function placeWeightInSlot(id, side, slotIdx){
+  removeFromState(id);
+  const slotEl = (side === 'left' ? DOM.leftPan : DOM.rightPan).querySelector(`.slot[data-slot-index="${slotIdx}"]`);
+  slotEl.appendChild(document.getElementById(id));
+  if (side === 'left') state.leftSlots[slotIdx] = id; else state.rightSlots[slotIdx] = id;
+}
+
+function appendToPool(id){
+  removeFromState(id);
+  DOM.pool.appendChild(document.getElementById(id));
+}
+
+function removeFromState(id){
+  state.leftSlots = state.leftSlots.map(s=>s===id?null:s);
+  state.rightSlots = state.rightSlots.map(s=>s===id?null:s);
+}
+
+function firstEmptyIndex(side){
+  const arr = side === 'left' ? state.leftSlots : state.rightSlots;
+  for (let i=0;i<arr.length;i++) if (!arr[i]) return i;
+  return null;
+}
+
+function clickPlace(id){
+  recomputeTorquesFromDom();
+  const side = state.leftTorque > state.rightTorque ? 'right' : 'left';
+  const idx = firstEmptyIndex(side);
+  if (idx === null) appendToPool(id);
+  else placeWeightInSlot(id, side, idx);
+  recomputeAndRender();
+}
+
+function keyboardPick(weightEl){
+  const id = weightEl.id;
+  if (!state.grabbed){
+    state.grabbed = {id, keyboard:true};
+    weightEl.classList.add('dragging');
+    document.body.appendChild(weightEl);
+    DOM.leftPan.focus();
+  } else {
+    finishKeyboardDrop(null);
+  }
+}
+function finishKeyboardDrop(target){
+  if (!state.grabbed) return;
+  const id = state.grabbed.id;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('dragging');
+  if (!target) appendToPool(id);
+  else placeWeightInSlot(id, target.side, target.index);
+  state.grabbed = null;
+  recomputeAndRender();
+}
+
+DOM.leftPan.addEventListener('keydown', panKeyHandler);
+DOM.rightPan.addEventListener('keydown', panKeyHandler);
+function panKeyHandler(e){
+  if (e.key === 'Enter' || e.key === ' '){
+    e.preventDefault();
+    if (state.grabbed && state.grabbed.keyboard){
+      const side = this === DOM.leftPan ? 'left' : 'right';
+      const idx = firstEmptyIndex(side);
+      if (idx !== null) finishKeyboardDrop({side, index: idx});
+    }
+  } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+    if (document.activeElement === DOM.leftPan && e.key === 'ArrowRight') DOM.rightPan.focus();
+    else if (document.activeElement === DOM.rightPan && e.key === 'ArrowRight') DOM.pool.querySelector('.weight')?.focus();
+    else if (document.activeElement === DOM.pool.querySelector('.weight') && e.key === 'ArrowRight') DOM.leftPan.focus();
+    if (document.activeElement === DOM.leftPan && e.key === 'ArrowLeft') DOM.pool.querySelector('.weight')?.focus();
+    if (document.activeElement === DOM.pool.querySelector('.weight') && e.key === 'ArrowLeft') DOM.rightPan.focus();
+  }
+}
+
+function recomputeTorquesFromDom(){
+  state.leftSlots = [null,null,null];
+  state.rightSlots = [null,null,null];
+  DOM.leftPan.querySelectorAll('.slot').forEach((slot,i)=>{
+    const child = slot.querySelector('.weight');
+    if (child) state.leftSlots[i] = child.id;
+  });
+  DOM.rightPan.querySelectorAll('.slot').forEach((slot,i)=>{
+    const child = slot.querySelector('.weight');
+    if (child) state.rightSlots[i] = child.id;
+  });
+}
+
+function recomputeTorquesFromState(){
+  let lt = 0, rt = 0;
+  DOM.leftPan.querySelectorAll('.slot').forEach((slot,i)=>{
+    const id = state.leftSlots[i];
+    if (id){
+      const w = Number(document.getElementById(id).dataset.weight || 0);
+      const d = Number(slot.dataset.distance || 1);
+      lt += w * d;
+    }
+  });
+  DOM.rightPan.querySelectorAll('.slot').forEach((slot,i)=>{
+    const id = state.rightSlots[i];
+    if (id){
+      const w = Number(document.getElementById(id).dataset.weight || 0);
+      const d = Number(slot.dataset.distance || 1);
+      rt += w * d;
+    }
+  });
+  state.leftTorque = lt; state.rightTorque = rt;
+}
+
+function recomputeAndRender(){
+  recomputeTorquesFromDom();
+  recomputeTorquesFromState();
+  DOM.leftTorqueEl.textContent = state.leftTorque;
+  DOM.rightTorqueEl.textContent = state.rightTorque;
+  const diff = state.leftTorque - state.rightTorque;
+  const allWeights = Array.from(document.querySelectorAll('.weight')).map(w=>Number(w.dataset.weight||0));
+  const maxPossible = Math.max(1, allWeights.reduce((a,b)=>a+b,0) * 3);
+  const MAX_ANGLE = 28;
+  const sensitivity = MAX_ANGLE / maxPossible;
+  let angle = diff * sensitivity;
+  angle = Math.max(Math.min(angle, MAX_ANGLE), -MAX_ANGLE);
+  DOM.beam.style.transform = `rotate(${angle}deg)`;
+  state.pool = Array.from(DOM.pool.querySelectorAll('.weight')).map(w=>w.id);
+  const lev = LEVELS[levelIndex];
+  if (Math.abs(diff) <= lev.tolerance && (state.leftTorque !== 0 || state.rightTorque !== 0)){
+    levelWin();
+  }
+}
+
+function startTimer(){
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(()=>{
+    state.timeRemaining--;
+    DOM.timeLeft.textContent = state.timeRemaining;
+    if (state.timeRemaining <= 0){
+      clearInterval(state.timer);
+      levelLose();
+    }
+  }, 1000);
+}
+
+function levelWin(){
+  clearInterval(state.timer);
+  const gained = Math.max(5, state.timeRemaining * 10);
+  state.score += gained;
+  DOM.score.textContent = state.score;
+  openAdModal(`You earned ${gained} points!`);
+}
+function levelLose(){
+  openAdModal('Time up — try again!');
+}
+
+/* Modal / Ad integration */
+function openAdModal(message){
+  // Show the integrated ad modal (modalBackdrop)
+  DOM.modalBackdrop.classList.add('show');
+  DOM.modalBackdrop.setAttribute('aria-hidden','false');
+
+  // populate ad modal message area
+  const adTitle = document.getElementById('adTitle');
+  const adMsg = document.getElementById('adMsg');
+  adTitle.textContent = 'Justice feels right when it’s equal.';
+  adMsg.textContent = message + ' — Thanks for playing.';
+
+  // ensure ad mini game is reset
+  resetAdMiniGame();
+
+  // focus next button
+  setTimeout(()=>DOM.nextLevelBtn.focus(), 120);
+}
+
+function hideAdModal(){
+  DOM.modalBackdrop.classList.remove('show');
+  DOM.modalBackdrop.setAttribute('aria-hidden','true');
+}
+
+/* Next / Restart wiring to the ad modal buttons */
+DOM.nextLevelBtn.addEventListener('click', () => {
+  hideAdModal();
+  // advance to next level (or repeat last if at end)
+  const next = Math.min(levelIndex+1, LEVELS.length-1);
+  startLevel(next);
+});
+DOM.closeModalBtn.addEventListener('click', () => {
+  hideAdModal();
+});
+
+/* Reset button (game) */
+DOM.resetBtn.addEventListener('click', () => {
+  document.querySelectorAll('.weight').forEach(w => DOM.pool.appendChild(w));
+  recomputeAndRender();
+});
+DOM.skipBtn.addEventListener('click', () => {
+  const next = Math.min(levelIndex+1, LEVELS.length-1);
+  startLevel(next);
+});
+DOM.hintBtn.addEventListener('click', giveHint);
+
+function giveHint(){
+  recomputeTorquesFromDom(); recomputeTorquesFromState();
+  const leftT = state.leftTorque, rightT = state.rightTorque;
+  const targetSide = leftT > rightT ? 'right' : 'left';
+  const poolWeights = Array.from(DOM.pool.querySelectorAll('.weight')).map(w=>({id:w.id, w:Number(w.dataset.weight)}));
+  if (poolWeights.length === 0){
+    const fromSide = targetSide === 'left' ? state.rightSlots : state.leftSlots;
+    const idFrom = fromSide.find(id=>id);
+    if (idFrom) {
+      const dest = firstEmptyIndex(targetSide);
+      if (dest !== null) placeWeightInSlot(idFrom, targetSide, dest);
+    }
+    recomputeAndRender();
+    return;
+  }
+  let best = {score:Infinity, id:null, idx:null};
+  for (const p of poolWeights){
+    for (let i=0;i<3;i++){
+      const slotOccupied = (targetSide === 'left') ? state.leftSlots[i] : state.rightSlots[i];
+      if (slotOccupied) continue;
+      const d = Number((targetSide==='left' ? DOM.leftPan : DOM.rightPan).querySelector(`.slot[data-slot-index="${i}"]`).dataset.distance);
+      let l = state.leftTorque, r = state.rightTorque;
+      if (targetSide === 'left') l += p.w * d; else r += p.w * d;
+      const score = Math.abs(l - r);
+      if (score < best.score){ best = {score, id: p.id, idx: i}; }
+    }
+  }
+  if (best.id) placeWeightInSlot(best.id, targetSide, best.idx);
+  recomputeAndRender();
+}
+
+/* ---------- Ad mini-game inside modal ---------- */
+/* This is the provided ad HTML's small balancing demo inside the popup.
+   We'll enable drag/drop in the ad area and compute its torque so it looks interactive.
+*/
+function resetAdMiniGame(){
+  // move any weights back to ad pool
+  const adPool = DOM.adPool;
+  const all = adPool.querySelectorAll('.weight');
+  all.forEach((w,i) => {
+    // ensure unique ids for internal tracking
+    w.dataset._id = 'adw' + i;
+  });
+  // clear ad pan areas
+  DOM.adLeftPan.innerHTML = '<div class="pan-slot"></div>';
+  DOM.adRightPan.innerHTML = '<div class="pan-slot"></div>';
+
+  // attach drag handlers for ad pool weights
+  adPool.querySelectorAll('.weight').forEach((w, idx) => {
+    w.addEventListener('dragstart', (e)=>{
+      e.dataTransfer.setData('text/id', w.dataset._id || ('adw'+idx));
+      e.dataTransfer.effectAllowed = 'move';
+      w.classList.add('dragging');
+    });
+    w.addEventListener('dragend', ()=> w.classList.remove('dragging'));
+  });
+
+  // allow drops on ad pan areas and pool
+  [DOM.adLeftPan, DOM.adRightPan, DOM.adPool].forEach(zone => {
+    zone.addEventListener('dragover', (e)=>{ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    zone.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/id');
+      if(!id) return;
+      const dragged = Array.from(document.querySelectorAll('#adPool .weight')).find(w=> (w.dataset._id===id));
+      if(!dragged) return;
+      if(zone === DOM.adPool) DOM.adPool.appendChild(dragged);
+      else zone.querySelector('.pan-slot').appendChild(dragged);
+      updateAdState();
+    });
+  });
+
+  // click-to-place from ad pool
+  DOM.adPool.addEventListener('click', (e)=>{
+    const w = e.target.closest('.weight');
+    if(!w) return;
+    const leftTorque = computeAdTorque(DOM.adLeftPan);
+    const rightTorque = computeAdTorque(DOM.adRightPan);
+    if(leftTorque <= rightTorque) DOM.adLeftPan.querySelector('.pan-slot').appendChild(w);
+    else DOM.adRightPan.querySelector('.pan-slot').appendChild(w);
+    updateAdState();
+  });
+
+  // touch fallback
+  let picked = null;
+  DOM.adPool.addEventListener('touchstart', (e)=>{
+    const t = e.target.closest('.weight');
+    if(t){ picked = t; t.classList.add('dragging'); }
+  });
+  DOM.adLeftPan.addEventListener('touchend', ()=>{ if(picked){ DOM.adLeftPan.querySelector('.pan-slot').appendChild(picked); picked.classList.remove('dragging'); picked=null; updateAdState(); } });
+  DOM.adRightPan.addEventListener('touchend', ()=>{ if(picked){ DOM.adRightPan.querySelector('.pan-slot').appendChild(picked); picked.classList.remove('dragging'); picked=null; updateAdState(); } });
+
+  // observe and update initially
+  updateAdState();
+
+  // ad controls
+  DOM.adResetBtn.onclick = () => {
+    // move ad pool weights back into pool area
+    const adWeights = document.querySelectorAll('#adPool .weight');
+    adWeights.forEach(w => DOM.adPool.appendChild(w));
+    updateAdState();
+  };
+  DOM.adHintBtn.onclick = () => {
+    // simple hint: move a pool weight to the lighter side
+    const poolWeights = Array.from(DOM.adPool.querySelectorAll('.weight'));
+    if (poolWeights.length === 0) return;
+    const leftT = computeAdTorque(DOM.adLeftPan);
+    const rightT = computeAdTorque(DOM.adRightPan);
+    let target = poolWeights[0];
+    for (const p of poolWeights){
+      if (Math.abs(Number(p.dataset.weight) - Math.abs(leftT-rightT)/2) < Math.abs(Number(target.dataset.weight) - Math.abs(leftT-rightT)/2)) target = p;
+    }
+    if (leftT > rightT) DOM.adRightPan.querySelector('.pan-slot').appendChild(target);
+    else DOM.adLeftPan.querySelector('.pan-slot').appendChild(target);
+    updateAdState();
+  };
+}
+
+function computeAdTorque(panEl){
+  const arr = Array.from(panEl.querySelectorAll('.weight')).map(n => Number(n.dataset.weight));
+  return arr.reduce((s,w)=>s+w,0);
+}
+function updateAdState(){
+  const left = computeAdTorque(DOM.adLeftPan);
+  const right = computeAdTorque(DOM.adRightPan);
+  DOM.adDiff.textContent = Math.abs(left-right);
+  const sign = right - left;
+  const angle = Math.max(-30, Math.min(30, sign * 6));
+  DOM.adBeam.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+  // show overlay message always when ad modal is open (ad provided had overlay show)
+  DOM.adOverlay.classList.add('show');
+}
+
+/* helper to expose for debug */
+window._BQ = {state, LEVELS, startLevel};
+
+(function attachSlotIndices(){
+  DOM.leftPan.querySelectorAll('.slot').forEach((s,i)=> s.dataset.slotIndex = i);
+  DOM.rightPan.querySelectorAll('.slot').forEach((s,i)=> s.dataset.slotIndex = i);
+})();
+
+/* Start first level */
+startLevel(0);
+
+</script>
+</body>
+</html>
