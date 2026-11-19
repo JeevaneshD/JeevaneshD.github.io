@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Transactional pages - never index.
+Disallow: /checkout.html
+Disallow: /confirmation.html
+
+# Production environment reference - documentation only, not for crawling.
+Disallow: /.env.example
+
+Sitemap: https://evaion.in/sitemap.xml

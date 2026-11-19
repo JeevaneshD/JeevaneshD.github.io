@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img" aria-labelledby="ship-title ship-desc">
+  <title id="ship-title">Shipping</title>
+  <desc id="ship-desc">A parcel on a dotted route leading to a location pin.</desc>
+  <defs>
+    <linearGradient id="ship-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#322050"/>
+      <stop offset="1" stop-color="#141017"/>
+    </linearGradient>
+    <linearGradient id="ship-route" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#675faa"/>
+      <stop offset="1" stop-color="#d7df23"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="700" rx="36" fill="url(#ship-bg)"/>
+  <g fill="none" stroke="#f3f0fb" stroke-opacity="0.08">
+    <circle cx="450" cy="350" r="300"/>
+    <circle cx="450" cy="350" r="230" stroke-dasharray="2 10"/>
+    <path d="M60 610h780M60 90h780"/>
+  </g>
+
+  <!-- Parcel -->
+  <g transform="translate(160 220)">
+    <path d="M0 92 120 30l120 62-120 62Z" fill="#21162e" stroke="#675faa" stroke-opacity="0.8" stroke-width="2"/>
+    <path d="M0 92v150l120 62V154Z" fill="#1b1226" stroke="#675faa" stroke-opacity="0.5" stroke-width="2"/>
+    <path d="M240 92v150l-120 62V154Z" fill="#251932" stroke="#675faa" stroke-opacity="0.5" stroke-width="2"/>
+    <path d="M120 30v62" stroke="#f3f0fb" stroke-opacity="0.25" stroke-width="2"/>
+    <path d="M44 60 120 100l76-40" fill="none" stroke="#f3f0fb" stroke-opacity="0.14"/>
+    <path d="M120 154v92" stroke="#d7df23" stroke-opacity="0.8" stroke-width="2"/>
+  </g>
+
+  <!-- Route -->
+  <path d="M430 420c70-46 92 32 158-12 56-38 58-116 118-144" fill="none" stroke="url(#ship-route)" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+  <g transform="translate(706 236)">
+    <path d="M0 24a26 26 0 1 1 52 0c0 19-26 44-26 44S0 43 0 24Z" fill="#1b1226" stroke="#d7df23" stroke-width="2"/>
+    <circle cx="26" cy="24" r="8" fill="none" stroke="#d7df23" stroke-width="2"/>
+    <ellipse cx="26" cy="94" rx="34" ry="8" fill="none" stroke="#f3f0fb" stroke-opacity="0.16"/>
+  </g>
+
+  <!-- Small marks -->
+  <g fill="#d7df23">
+    <circle cx="160" cy="220" r="3"/>
+    <circle cx="740" cy="560" r="3"/>
+  </g>
+</svg>

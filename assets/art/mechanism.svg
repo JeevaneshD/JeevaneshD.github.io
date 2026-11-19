@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-labelledby="mech-title mech-desc">
+  <title id="mech-title">Echo open and closed</title>
+  <desc id="mech-desc">A line drawing of the open Echo headphones beside the closed spherical form.</desc>
+  <defs>
+    <linearGradient id="mech-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#35204f"/>
+      <stop offset="0.55" stop-color="#22162f"/>
+      <stop offset="1" stop-color="#141017"/>
+    </linearGradient>
+    <radialGradient id="mech-cup" cx="34%" cy="24%" r="86%">
+      <stop offset="0" stop-color="#d9c8ff"/>
+      <stop offset="0.2" stop-color="#a98be4"/>
+      <stop offset="0.55" stop-color="#6f53ab"/>
+      <stop offset="0.86" stop-color="#3a2457"/>
+      <stop offset="1" stop-color="#21152f"/>
+    </radialGradient>
+    <linearGradient id="mech-metal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2a2033"/>
+      <stop offset="0.2" stop-color="#8e7aa8"/>
+      <stop offset="0.5" stop-color="#4a3a5c"/>
+      <stop offset="0.8" stop-color="#b09ac8"/>
+      <stop offset="1" stop-color="#241a2d"/>
+    </linearGradient>
+    <filter id="mech-soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" rx="40" fill="url(#mech-bg)"/>
+  <g fill="none" stroke="#f3f0fb" stroke-opacity="0.07">
+    <circle cx="330" cy="400" r="270"/>
+    <circle cx="900" cy="400" r="220"/>
+    <path d="M60 650h1080M60 150h1080"/>
+  </g>
+
+  <!-- Open headphones -->
+  <g>
+    <ellipse cx="330" cy="650" rx="230" ry="22" fill="#080609" opacity="0.55" filter="url(#mech-soft)"/>
+    <path d="M205 310C205 150 455 150 455 310" fill="none" stroke="#0d0912" stroke-width="42" stroke-linecap="round"/>
+    <path d="M205 310C205 150 455 150 455 310" fill="none" stroke="url(#mech-metal)" stroke-width="30" stroke-linecap="round"/>
+    <path d="M205 310C205 150 455 150 455 310" fill="none" stroke="#f3f0fb" stroke-opacity="0.28" stroke-width="2" stroke-dasharray="3 7"/>
+    <rect x="188" y="292" width="34" height="72" rx="17" fill="url(#mech-metal)" stroke="#0d0912" stroke-width="3"/>
+    <rect x="438" y="292" width="34" height="72" rx="17" fill="url(#mech-metal)" stroke="#0d0912" stroke-width="3"/>
+    <rect x="156" y="320" width="92" height="176" rx="46" fill="url(#mech-cup)" stroke="#1a1027" stroke-width="3"/>
+    <rect x="232" y="340" width="28" height="136" rx="14" fill="#17121b" stroke="#0c090f" stroke-width="2"/>
+    <rect x="238" y="356" width="8" height="104" rx="4" fill="#f3f0fb" opacity="0.12"/>
+    <rect x="412" y="320" width="92" height="176" rx="46" fill="url(#mech-cup)" stroke="#1a1027" stroke-width="3"/>
+    <rect x="400" y="340" width="28" height="136" rx="14" fill="#17121b" stroke="#0c090f" stroke-width="2"/>
+    <rect x="414" y="356" width="8" height="104" rx="4" fill="#f3f0fb" opacity="0.12"/>
+    <g fill="#d7df23">
+      <circle cx="202" cy="382" r="3"/>
+      <circle cx="458" cy="382" r="3"/>
+    </g>
+    <path d="M120 560h420" stroke="#f3f0fb" stroke-opacity="0.22"/>
+    <path d="M120 552v16M540 552v16" stroke="#f3f0fb" stroke-opacity="0.22"/>
+  </g>
+
+  <!-- Direction -->
+  <g fill="none" stroke="#d7df23" stroke-width="2">
+    <path d="M620 400h120" stroke-dasharray="2 10"/>
+    <path d="m726 386 16 14-16 14" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Closed sphere -->
+  <g>
+    <ellipse cx="900" cy="650" rx="175" ry="20" fill="#080609" opacity="0.55" filter="url(#mech-soft)"/>
+    <circle cx="900" cy="400" r="168" fill="url(#mech-cup)" stroke="#1a1027" stroke-width="3"/>
+    <path d="M900 232v336" stroke="#0b0810" stroke-width="2"/>
+    <path d="M900 232v336" stroke="#f3f0fb" stroke-opacity="0.45" stroke-width="1"/>
+    <path d="M756 320c42-48 246-48 288 0" fill="none" stroke="#0d0912" stroke-width="16" stroke-linecap="round"/>
+    <path d="M756 320c42-48 246-48 288 0" fill="none" stroke="#f3f0fb" stroke-opacity="0.28" stroke-width="2"/>
+    <path d="M900 545v42" stroke="#d7df23" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="900" cy="592" r="4" fill="#d7df23"/>
+    <circle cx="900" cy="400" r="150" fill="none" stroke="#f3f0fb" stroke-opacity="0.08"/>
+    <path d="M786 292c32-26 196-26 228 0" fill="none" stroke="#f3f0fb" stroke-opacity="0.2" stroke-width="2"/>
+    <path d="M735 560h330" stroke="#f3f0fb" stroke-opacity="0.22"/>
+    <path d="M735 552v16M1065 552v16" stroke="#f3f0fb" stroke-opacity="0.22"/>
+  </g>
+</svg>

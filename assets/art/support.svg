@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img" aria-labelledby="sup-title sup-desc">
+  <title id="sup-title">Support</title>
+  <desc id="sup-desc">An Echo ear cup with a waveform and a conversation bubble.</desc>
+  <defs>
+    <linearGradient id="sup-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#332050"/>
+      <stop offset="1" stop-color="#141017"/>
+    </linearGradient>
+    <radialGradient id="sup-cup" cx="35%" cy="25%" r="82%">
+      <stop offset="0" stop-color="#d9c8ff"/>
+      <stop offset="0.4" stop-color="#8f70ca"/>
+      <stop offset="1" stop-color="#382151"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="700" rx="36" fill="url(#sup-bg)"/>
+  <g fill="none" stroke="#f3f0fb" stroke-opacity="0.08">
+    <circle cx="450" cy="350" r="300"/>
+    <circle cx="450" cy="350" r="235" stroke-dasharray="2 10"/>
+  </g>
+
+  <!-- Ear cup -->
+  <g transform="translate(330 330)">
+    <rect x="-86" y="-96" width="172" height="192" rx="86" fill="url(#sup-cup)" stroke="#1a1027" stroke-width="2"/>
+    <rect x="56" y="-70" width="26" height="140" rx="13" fill="#17121b" stroke="#0c090f" stroke-width="2"/>
+    <path d="M-52-40c-18 26-18 54 0 80" fill="none" stroke="#f3f0fb" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Waveform -->
+  <g transform="translate(460 400)" stroke="#d7df23" stroke-width="3" stroke-linecap="round">
+    <path d="M0-54v108M26-32v64M52-66v132M78-18v36M104-44v88M130-24v48M156-58v116M182-12v24"/>
+  </g>
+
+  <!-- Conversation bubble -->
+  <g transform="translate(528 150)">
+    <path d="M0 32A32 32 0 0 1 32 0h148a32 32 0 0 1 32 32v62a32 32 0 0 1-32 32H88l-44 38 10-38H32A32 32 0 0 1 0 94Z" fill="#1b1226" stroke="#675faa" stroke-opacity="0.9" stroke-width="2"/>
+    <g fill="#f3f0fb" fill-opacity="0.55">
+      <circle cx="92" cy="64" r="5"/>
+      <circle cx="122" cy="64" r="5"/>
+      <circle cx="152" cy="64" r="5"/>
+    </g>
+  </g>
+
+  <g fill="#d7df23">
+    <circle cx="256" cy="196" r="3"/>
+    <circle cx="688" cy="538" r="3"/>
+  </g>
+</svg>

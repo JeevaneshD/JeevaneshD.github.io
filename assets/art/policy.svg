@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img" aria-labelledby="pol-title pol-desc">
+  <title id="pol-title">Policy</title>
+  <desc id="pol-desc">An abstract document with a ring, a lock and a fine grid.</desc>
+  <defs>
+    <linearGradient id="pol-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#312049"/>
+      <stop offset="1" stop-color="#141017"/>
+    </linearGradient>
+    <linearGradient id="pol-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#675faa"/>
+      <stop offset="1" stop-color="#d7df23"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="700" rx="36" fill="url(#pol-bg)"/>
+  <g fill="none" stroke="#f3f0fb" stroke-opacity="0.08">
+    <circle cx="450" cy="350" r="300"/>
+    <circle cx="450" cy="350" r="235" stroke-dasharray="2 10"/>
+  </g>
+
+  <!-- Document -->
+  <g transform="translate(250 120)">
+    <rect x="0" y="0" width="300" height="400" rx="18" fill="#1b1226" stroke="#675faa" stroke-opacity="0.8" stroke-width="2"/>
+    <path d="M52 64h196M52 104h196M52 144h140M52 184h168M52 224h120M52 264h152M52 304h96" stroke="#f3f0fb" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"/>
+    <path d="M52 344h184" stroke="url(#pol-line)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Ring and lock -->
+  <g transform="translate(590 400)">
+    <circle cx="0" cy="0" r="112" fill="none" stroke="#d7df23" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="4 12"/>
+    <circle cx="0" cy="0" r="82" fill="#1b1226" stroke="#675faa" stroke-opacity="0.9" stroke-width="2"/>
+    <rect x="-30" y="-16" width="60" height="54" rx="10" fill="none" stroke="#f3f0fb" stroke-opacity="0.8" stroke-width="3"/>
+    <path d="M-16-16v-12a16 16 0 0 1 32 0v12" fill="none" stroke="#f3f0fb" stroke-opacity="0.8" stroke-width="3"/>
+    <circle cx="0" cy="8" r="4" fill="#d7df23"/>
+  </g>
+</svg>
