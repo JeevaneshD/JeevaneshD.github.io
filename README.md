@@ -32,8 +32,8 @@ template.
 
 Interactions use native form controls: checkboxes for navigation and the cart,
 radios for galleries and quantities, `<details>` for FAQs, and CSS `:has()` for
-state-dependent styling. The mechanism is a static inline SVG diagram; no
-content depends on scroll position or script.
+state-dependent styling. The mechanism uses a static inline SVG diagram. The
+homepage reveal effect uses CSS view timelines.
 
 `premium.css` is loaded after `editorial.css` on all 11 pages. It is the final
 visual layer: revised tokens, sentence-case type, Newsreader accents, soft
@@ -48,7 +48,6 @@ layer auditable instead of adding more overrides to the editorial sheet.
 ## 2. Run locally
 
 ```powershell
-cd "D:\Project ion\evaion"
 python -m http.server 8080
 ```
 
@@ -174,8 +173,8 @@ hard rules, softer colour fields, more air and a restrained use of Liquid Glass.
 - **Motion:** 180–600ms on one easing curve,
   `cubic-bezier(0.22, 1, 0.36, 1)`. The product gallery is an opacity-only
   300ms crossfade with no scale; all four frames are eagerly loaded so a view
-  change never waits on the network. Entrance reveals and scroll progress remain
-  absent.
+  change never waits on the network. Homepage content below the hero fades and
+  rises slightly as it enters the viewport.
 - **Signature motif:** the headphone closes into a sphere. The idea is carried
   by a static line diagram, by proportion, by the ledger of specifications and
   by the product photography — not by decorative clutter.
@@ -202,12 +201,13 @@ the root element:
 | Value | What appears |
 | --- | --- |
 | `buy` | Price, quantity, Add to bag, dispatch note |
-| `preorder` | Preorder CTA to checkout, sample shipping window, stock label |
-| `waitlist` | Email waitlist form, invitation note, waitlist stock label |
+| `preorder` | Preorder CTA to checkout, dispatch note, preorder label |
+| `waitlist` | Email field with native validation and a preview confirmation |
 
 All pages currently ship with `data-sales-mode="buy"`. To preview another state,
 edit that attribute in `echo.html` (and any page whose cart CTA should match).
-No JavaScript reads this value; the variants are pure CSS.
+CSS applies the selected mode to the buy panel, closing CTA and mobile bar. The
+waitlist preview validates the address locally and leaves it out of the URL.
 
 **Limitation:** production `SALES_MODE` should come from the commerce backend so
 product state, CTA, schema availability and checkout behaviour cannot drift
@@ -223,7 +223,8 @@ The cart is a CSS state machine:
 2. `#cart-filled` exists only on `echo.html`. “Add to bag”, the closing CTA and
    the mobile buy bar check it, which opens the filled drawer.
 3. Quantity radios update the line price, order total, drawer quantity, header
-   count and subtotal with `:has()` selectors.
+   count and subtotal with `:has()` selectors. Buy now and the bag’s Checkout
+   link pass the chosen quantity in the URL fragment.
 4. Closing the filled drawer unchecks `#cart-filled`, returning the demo to an
    empty bag. State does not persist across pages or reloads.
 
@@ -248,14 +249,18 @@ provide these.
 
 - contact and delivery fields with native validation;
 - one standard delivery method and three payment-method radios;
-- a sticky order summary with the sample price and tax note;
+- a sticky order summary on desktop and a compact total above the form on mobile;
+- the selected quantity, line price and total from Echo, with one unit as the
+  default when checkout is opened directly;
 - a visible demonstration badge and a note that no payment is taken;
-- a submit button that opens `confirmation.html` with the entered values as a
-  query string. Nothing is transmitted to a server.
+- a submit button that opens `confirmation.html` after native validation.
+  Contact and address fields have no submission names, so the navigation URL
+  includes only the sample payment and delivery options.
 
 `confirmation.html` is explicitly labelled a demonstration. It shows the intended
 post-payment timeline but states that no payment, order, invoice or email exists.
-Example order number `EV-2601-0482` and the dispatch date are sample details.
+The confirmation shows the sample order reference `EV-2601-0482` and explains
+what happens after a live order.
 
 **Production requirement:** replace the demo submission with a server-created
 checkout session from Shopify Checkout or Razorpay. Verify payment via webhook on
@@ -286,8 +291,8 @@ in HTML, CSS or client-delivered JavaScript.
   cues are implemented.
 - The mobile menu and cart layer are labelled regions so their content stays
   inside landmarks.
-- Axe (WCAG 2.0/2.1 A, AA and best-practice rules) returns **zero violations**
-  on all 11 pages at 375, 768 and 1440px.
+- The original storefront audit reported zero axe violations on all 11 pages at
+  375, 768 and 1440px. See the verification section for subsequent browser checks.
 - Colour is never the only signal: stock states, errors and selections include
   text or shape changes.
 
@@ -380,6 +385,13 @@ and the `--font-display` / `--font-body` tokens are updated.
 
 ## 12. Verification performed
 
+The current storefront was checked across all 11 pages at 320, 768 and 1440px.
+Internal links and fragments were validated, quantities 1–3 were checked in the
+checkout, and the demo form reached confirmation with example contact and
+address values omitted from the URL.
+
+The original storefront audit recorded the following checks.
+
 - 11 pages checked at 375, 768, 1280, 1440 and 1536px after the premium layer:
   no horizontal scrollbar, console errors or failed requests.
 - Internal links, fragment anchors, asset paths and ARIA ID references resolve.
@@ -411,8 +423,7 @@ and the `--font-display` / `--font-body` tokens are updated.
 - Sales-mode variants verified for `buy`, `preorder` and `waitlist` by toggling
   `data-sales-mode` and checking the visible CTA, stock label and waitlist form.
 - Checkout validation rejects an empty form; a completed form reaches the
-  demonstration confirmation page with the entered values in the query string.
-  No payment is processed.
+  demonstration confirmation page.
 
 These checks are a point-in-time front-end audit, not a substitute for testing
 with real assistive technology, real content, real payment credentials or a
@@ -452,7 +463,7 @@ approved facts. Replace them with verified content before accepting orders.
 
 ## 14. Deployment
 
-The site is fully static. Upload the contents of `evaion/` to any static host
+The site is fully static. Upload the storefront files to any static host
 (Netlify, Cloudflare Pages, GitHub Pages, S3, nginx). Requirements:
 
 1. Serve `index.html` at `/`.
@@ -490,8 +501,8 @@ filenames if the build moves to a bundler.
    which the HTML + CSS brief excludes.
 8. **Sample content is not verified.** Product specifications, company details,
    dates, policies and order information must be replaced before launch.
-9. **Checkout does not transmit data to a server.** Native validation works and
-   the demo proceeds to confirmation, but no order exists.
+9. **Checkout uses native demo validation.** The confirmation shows an example
+   order reference. Contact and address details stay in the form.
 10. **One colourway only.** Violet Alloy is the only finish shown; do not add
     colour variants without approved photography and SKUs.
 

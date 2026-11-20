@@ -269,10 +269,15 @@ body {
   overflow-x: clip;
 }
 
-body:has(#nav-open:checked),
 body:has(#cart-open:checked),
 body:has(#cart-filled:checked) {
   overflow: hidden;
+}
+
+@media (width < 56.25rem) {
+  body:has(#nav-open:checked) {
+    overflow: hidden;
+  }
 }
 
 img,
@@ -1374,11 +1379,15 @@ body:has(#cart-filled:checked):has(#pq3:checked) .cart-count::after {
 }
 
 .menu-btn {
+  --menu-line-gap: 0.3rem;
+  --menu-line-height: 1px;
+  --menu-line-offset: calc(var(--menu-line-gap) + var(--menu-line-height));
+
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: var(--menu-line-gap);
   width: 2.75rem;
   height: 2.75rem;
   border: 1px solid rgba(243, 240, 251, 0.16);
@@ -1391,7 +1400,7 @@ body:has(#cart-filled:checked):has(#pq3:checked) .cart-count::after {
 .menu-btn span {
   display: block;
   width: 0.95rem;
-  height: 1px;
+  height: var(--menu-line-height);
   background: currentColor;
   transition: transform var(--dur-2) var(--ease), opacity var(--dur-1) var(--ease);
 }
@@ -1407,16 +1416,16 @@ body:has(#cart-filled:checked):has(#pq3:checked) .cart-count::after {
   outline-offset: 3px;
 }
 
-body:has(#nav-open:checked) .menu-btn span:first-child {
-  transform: translateY(0.2rem) rotate(45deg);
+#nav-open:checked + .menu-btn span:first-child {
+  transform: translateY(var(--menu-line-offset)) rotate(45deg);
 }
 
-body:has(#nav-open:checked) .menu-btn span:nth-child(2) {
+#nav-open:checked + .menu-btn span:nth-child(2) {
   opacity: 0;
 }
 
-body:has(#nav-open:checked) .menu-btn span:last-child {
-  transform: translateY(-0.2rem) rotate(-45deg);
+#nav-open:checked + .menu-btn span:last-child {
+  transform: translateY(calc(-1 * var(--menu-line-offset))) rotate(-45deg);
 }
 
 .nav-sheet {
@@ -4391,9 +4400,14 @@ body:has(#pq3:checked) .p-total--3 {
   gap: 0.45rem;
 }
 
+.buy-actions,
+.buy-actions .mode-buy,
+.buy-actions__secondary {
+  gap: 0.65rem;
+}
+
 .buy-actions {
   display: grid;
-  gap: 0.55rem;
 }
 
 .buy-actions .btn {
@@ -4403,7 +4417,6 @@ body:has(#pq3:checked) .p-total--3 {
 .buy-actions__secondary {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.55rem;
 }
 
 .stock-line {
@@ -4537,7 +4550,7 @@ body:has(#pq3:checked) .p-total--3 {
   font-size: 0.66rem;
 }
 
-.panel-trust div {
+.panel-trust a {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -4595,6 +4608,29 @@ body:has(#pq3:checked) .p-total--3 {
 
 [data-sales-mode="waitlist"] .mode-waitlist.btn {
   display: inline-flex;
+}
+
+/* Hide actions for the other sales modes, including shared closing controls. */
+[data-sales-mode="buy"] :is(.mode-preorder, .mode-waitlist),
+[data-sales-mode="preorder"] :is(.mode-buy, .mode-waitlist, .qty-row.purchase-only, .p-total.purchase-only),
+[data-sales-mode="waitlist"] :is(.mode-buy, .mode-preorder, .purchase-only),
+.waitlist-result:not(:target) {
+  display: none;
+}
+
+/* Echo reads the selected radio; the static checkout reads the URL fragment. */
+.page-product:not(:has(#pq2:checked, #pq3:checked)) .quantity-link:not(.quantity-1),
+.page-product:has(#pq2:checked) .quantity-link:not(.quantity-2),
+.page-product:has(#pq3:checked) .quantity-link:not(.quantity-3),
+.checkout-main .quantity-value:not(.quantity-1),
+body:has(#quantity-2:target) .checkout-main .quantity-value:not(.quantity-2),
+body:has(#quantity-3:target) .checkout-main .quantity-value:not(.quantity-3) {
+  display: none;
+}
+
+body:has(#quantity-2:target) .checkout-main .quantity-2,
+body:has(#quantity-3:target) .checkout-main .quantity-3 {
+  display: inline;
 }
 
 .waitlist-form {
@@ -10540,11 +10576,6 @@ body.page-checkout .secure-pill svg {
 .policy-table th,
 .policy-table td {
   font-size: 0.8rem;
-}
-
-.policy-contact {
-  border-radius: 0.5rem;
-  background: #ffffff;
 }
 
 /* 43. Checkout

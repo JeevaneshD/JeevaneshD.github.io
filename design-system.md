@@ -256,15 +256,14 @@ last assurance row is never trapped below the viewport.
 
 ### Principles
 
-- Content is visible by default. There are no entrance reveals and no scroll
-  progress bar; `.reveal` and `.reveal-scale` are forced visible and
-  `.scroll-progress` is hidden.
+- Content is visible by default. Homepage blocks with `.home-reveal` fade
+  in and rise slightly as they enter the viewport. The effect uses a CSS view
+  timeline and is skipped for reduced motion, print and keyboard focus.
 - The open/closed mechanism is a **static inline SVG**. It is not a scroll
   timeline and must not be described as an animated product demonstration.
-- Motion is limited to direct feedback: hover, focus, pressed, selected and
-  drawer or menu open/close.
-- Animate colour, border and opacity. Use transform only for the cart drawer and
-  menu sheet. Do not add parallax, sheen sweeps, image zooms or ambient loops.
+- Direct feedback includes hover, focus, pressed, selected and drawer or menu
+  open/close. Use short movement for those overlays and the homepage reveals.
+- Avoid parallax, sheen sweeps, image zooms and ambient loops.
 
 ### Product gallery
 
@@ -296,15 +295,16 @@ No content or function may depend on motion to be understood.
 
 ### Header
 
-- Sticky glass-paper rail, `4.2rem` desktop and `3.8rem` mobile, with a light
-  hairline and a subtle inset highlight.
+- Desktop storefront pages use a sticky, inset glass bar with the wordmark,
+  centered links and cart. The mobile and checkout headers use a full-width rail.
 - Black `evaion` wordmark; the brand icon is hidden in the header.
 - Desktop navigation is sentence-case Inter at a quiet size, with a soft
   current-page pill rather than a hard underline.
 - Actions: round cart trigger with count and round mobile menu trigger.
 - `aria-current="page"` marks the active destination only.
 - At <900px the nav collapses into a glass paper sheet driven by `#nav-open`. The
-  sheet is a labelled region and keeps the header and menu button visible.
+  sheet is a labelled region and keeps the header and menu button visible. The
+  two outer strokes meet at the centre to form the close icon.
 - The header stays light on every page, including checkout and confirmation.
 
 ### Buttons
@@ -363,7 +363,7 @@ nudge 2–3px; do not animate the underline.
 
 - Glass card with a light border, soft inset highlight and a large radius.
 - Sticky from 900px on tall screens, offset by the header plus `1rem`.
-- Panel order: eyebrow and tag, title, description, price, finish, quantity,
+- Panel order: title, description, price, finish, quantity,
   total, actions, stock line, assurances.
 - Padding `clamp(1.15rem, 2.1vw, 1.55rem)`, gaps `0.95rem`. This keeps the panel
   at roughly 800px so it fits a 900px viewport when pinned.
@@ -381,10 +381,10 @@ nudge 2–3px; do not animate the underline.
 
 - Four radio-controlled views in this order: pool, worn portrait, macro detail,
   stone still.
-- Main stage is `4 / 5`, rounded, with a quiet border and no hover scale.
+- The rounded gallery stage fills its column at a `4 / 5` aspect ratio.
 - Caption is a compact glass pill at the lower left, not a full-width bar.
-- Thumbnails are four even square columns, rounded, with a translucent edge; the
-  checked state raises opacity and border contrast.
+- Thumbnails use four even columns with rounded edges. The selected view has
+  a violet outline as well as higher opacity.
 - The gallery crossfades with opacity only over 300ms. All four main images are
   eager-loaded; thumbnails may remain lazy.
 - The stage uses `contain: paint` and `isolation: isolate` to keep the fade
@@ -422,7 +422,7 @@ measure. The row uses a soft rule and generous vertical padding.
 - Light paper hero with the page title, lede and a short meta row. Concept art is
   hidden.
 - A single editorial column capped at 54rem, with body copy at 45rem. No sticky
-  table of contents.
+  table of contents. A compact set of links at the top goes directly to policy sections.
 - Body sections use `h2`, short paragraphs, lists, semantic tables and callouts.
 - Tables use Inter for values and IBM Plex Mono for labels, with hairline rules
   and real `<th scope>`.
@@ -433,7 +433,8 @@ measure. The row uses a soft rule and generous vertical padding.
 
 - Calm opening block: sentence-case display title, short lede and a quiet rule.
 - Single-column form cards with rounded corners and a small numbered step.
-- Sticky order summary at ≥768px, with a rounded stone thumbnail.
+- Sticky order summary at ≥768px, with a rounded stone thumbnail. A compact
+  total precedes the form on mobile.
 - Payment and shipping methods are rounded radios with provider labels; card
   data is never collected.
 - Demonstration badge and hosted-payment note stay visible and readable.
@@ -443,7 +444,7 @@ measure. The row uses a soft rule and generous vertical padding.
 ### Confirmation
 
 - Rounded white card on paper, soft check mark, sentence-case title with a serif
-  accent, four-column order meta grid and a quiet total row.
+  accent, an example order reference and a timeline explaining a live order.
 - Uses the same compact footer as checkout.
 - Never imply a real order without a backend reference.
 
@@ -629,7 +630,7 @@ Before shipping a page:
 - [ ] Text contrast passes against the composited background, especially on
       glass, photography and deep-violet panels.
 - [ ] Reduced-motion view is complete and static.
-- [ ] No entrance reveal, scroll progress or scroll-driven mechanism remains.
+- [ ] Homepage reveals leave content visible with reduced motion or without CSS view timeline support.
 - [ ] Content is visible without JavaScript.
 - [ ] No invented claims presented as verified facts.
 - [ ] Sample content is labelled where it could be mistaken for policy or fact.
